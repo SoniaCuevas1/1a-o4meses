@@ -333,6 +333,7 @@ function room() {
                 class="object ${clockClass}"
                 onclick="inspectClock()">
 
+                <img src="2.jpeg" alt="Reloj" class="objectImage" width="120" height="120">
 
                 <span class="objectLabel">
                     RELOJ
@@ -348,6 +349,7 @@ function room() {
                 class="object ${photoClass}"
                 onclick="inspectPhoto()">
 
+                <img src="1.jpeg" alt="Fotografía" class="objectImage" width="120" height="120">
 
                 <span class="objectLabel">
                     FOTOGRAFÍA
@@ -363,6 +365,7 @@ function room() {
                 class="object ${notebookClass}"
                 onclick="inspectNotebook()">
 
+                <img src="3.jpeg" alt="Cuaderno" class="objectImage"width="120" height="120">
 
                 <span class="objectLabel">
                     CUADERNO
@@ -378,6 +381,7 @@ function room() {
                 class="object ${computerClass}"
                 onclick="inspectComputer()">
 
+                <img src="5.jpeg" alt="Computadora" class="objectImage" width="120" height="120">
 
                 <span class="objectLabel">
                     COMPUTADORA
@@ -392,6 +396,9 @@ function room() {
                 id="door"
                 class="object ${doorClass}"
                 onclick="inspectDoor()">   
+
+                <img src="4.jpeg" alt="Puerta" class="objectImage" width="120" height="120">
+
                 <span class="objectLabel">
                     PUERTA
                 </span>
@@ -1310,6 +1317,13 @@ function finalMessage() {
 }
 
 
+/* =========================================================
+   INICIO
+========================================================= */
+
+updateHUD();
+
+titleScreen();
 /* =========================================================
    INICIO
 ========================================================= */
