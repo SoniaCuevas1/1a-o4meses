@@ -1,0 +1,766 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #06060a;
+    --background2: #0d0d16;
+    --panel: #11111c;
+    --border: #38384b;
+
+    --text: #eeeeF5;
+    --gray: #85859b;
+
+    --pink: #ff7fa8;
+    --cyan: #7de2e8;
+    --gold: #f5d37a;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Press Start 2P", monospace;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+button {
+    font-family: inherit;
+}
+
+#game {
+    width: 100%;
+    min-height: 100vh;
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #161625 0%,
+            var(--background) 65%
+        );
+
+    overflow: hidden;
+}
+
+/* =========================
+   SCANLINES
+========================= */
+
+#scanlines {
+    pointer-events: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.025) 0px,
+        rgba(255,255,255,0.025) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+
+    mix-blend-mode: overlay;
+}
+
+/* =========================
+   HUD
+========================= */
+
+#hud {
+    height: 55px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 30px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: rgba(6,6,10,0.95);
+
+    font-size: 11px;
+
+    color: var(--gray);
+
+    position: relative;
+    z-index: 10;
+}
+
+#chapter {
+    color: var(--pink);
+}
+
+#memories {
+    color: var(--cyan);
+}
+
+/* =========================
+   SCREEN
+========================= */
+
+#screen {
+    min-height: calc(100vh - 55px);
+
+    position: relative;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.titleScreen {
+    min-height: calc(100vh - 55px);
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.titleScreen h1 {
+    font-size: clamp(40px, 10vw, 90px);
+
+    margin: 0;
+
+    color: var(--pink);
+
+    text-shadow:
+        4px 4px 0 #351b28,
+        0 0 25px rgba(255,127,168,0.25);
+}
+
+.subtitle {
+    margin-top: 20px;
+
+    color: var(--gray);
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+.titleButtons {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 50px;
+
+    width: min(320px, 90%);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.pixelButton {
+    padding: 15px 18px;
+
+    border: 1px solid var(--border);
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.12s,
+        background 0.12s,
+        border-color 0.12s;
+}
+
+.pixelButton:hover {
+    transform: translate(-2px, -2px);
+
+    background: #1b1b2b;
+
+    border-color: var(--pink);
+
+    color: var(--pink);
+}
+
+.pixelButton:active {
+    transform: translate(0, 0);
+}
+
+.dangerButton {
+    color: #ff8d8d;
+}
+
+.smallButton {
+    padding: 10px 12px;
+
+    font-size: 9px;
+}
+
+/* =========================
+   ROOM
+========================= */
+
+.room {
+    min-height: calc(100vh - 55px);
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #11111d 0%,
+            #0c0c15 68%,
+            #17121a 68%,
+            #17121a 100%
+        );
+}
+
+.wall {
+    position: absolute;
+
+    inset: 0 0 32% 0;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 79px,
+            rgba(255,255,255,0.015) 80px
+        );
+}
+
+.floor {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 32%;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #17121a 0,
+            #17121a 49px,
+            #211823 50px
+        );
+}
+
+/* =========================
+   OBJECTS
+========================= */
+
+.object {
+    position: absolute;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid var(--border);
+
+    background: rgba(17,17,28,0.95);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        border-color 0.15s,
+        box-shadow 0.15s;
+}
+
+.object:hover {
+    transform: translateY(-5px);
+
+    border-color: var(--pink);
+
+    box-shadow:
+        0 0 20px rgba(255,127,168,0.15);
+}
+
+.object.locked {
+    opacity: 0.45;
+}
+
+.object.completed {
+    border-color: var(--cyan);
+
+    box-shadow:
+        0 0 20px rgba(125,226,232,0.12);
+}
+
+.objectLabel {
+    position: absolute;
+
+    bottom: -28px;
+
+    white-space: nowrap;
+
+    font-size: 9px;
+
+    color: var(--gray);
+}
+
+/* Clock */
+
+#clock {
+    width: 130px;
+    height: 130px;
+
+    border-radius: 50%;
+
+    left: 15%;
+    top: 16%;
+
+    font-size: 18px;
+
+    color: var(--gold);
+}
+
+/* Photo */
+
+#photo {
+    width: 115px;
+    height: 90px;
+
+    left: 38%;
+    top: 26%;
+
+    font-size: 30px;
+}
+
+/* Notebook */
+
+#notebook {
+    width: 130px;
+    height: 100px;
+
+    left: 55%;
+    top: 48%;
+
+    font-size: 30px;
+}
+
+/* Computer */
+
+#computer {
+    width: 170px;
+    height: 115px;
+
+    right: 12%;
+    top: 19%;
+
+    font-size: 35px;
+}
+
+/* Door */
+
+#door {
+    width: 110px;
+    height: 210px;
+
+    left: 7%;
+    bottom: 0;
+
+    font-size: 30px;
+}
+
+/* =========================
+   ROOM HINT
+========================= */
+
+.roomHint {
+    position: absolute;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    bottom: 25px;
+
+    width: min(700px, 90%);
+
+    text-align: center;
+
+    color: var(--gray);
+
+    font-size: 9px;
+
+    line-height: 1.8;
+
+    opacity: 0.8;
+}
+
+/* =========================
+   DIALOGUE
+========================= */
+
+#dialogue {
+    position: fixed;
+
+    left: 50%;
+    bottom: 25px;
+
+    transform: translateX(-50%);
+
+    width: min(850px, 92%);
+
+    padding: 22px;
+
+    border: 1px solid var(--border);
+
+    background: rgba(10,10,17,0.97);
+
+    box-shadow:
+        0 0 40px rgba(0,0,0,0.5);
+
+    z-index: 500;
+}
+
+#speaker {
+    color: var(--pink);
+
+    font-size: 10px;
+
+    margin-bottom: 15px;
+}
+
+#dialogueText {
+    color: var(--text);
+
+    font-size: 11px;
+
+    line-height: 2;
+
+    min-height: 45px;
+}
+
+#nextButton {
+    margin-top: 20px;
+
+    padding: 11px 15px;
+
+    border: 1px solid var(--border);
+
+    background: var(--panel);
+
+    color: var(--cyan);
+
+    cursor: pointer;
+}
+
+#nextButton:hover {
+    border-color: var(--cyan);
+}
+
+/* =========================
+   CENTER
+========================= */
+
+.center {
+    min-height: calc(100vh - 55px);
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.center h2 {
+    color: var(--pink);
+
+    font-size: clamp(20px, 5vw, 38px);
+}
+
+.center p {
+    max-width: 700px;
+
+    color: var(--gray);
+
+    font-size: 11px;
+
+    line-height: 2;
+}
+
+/* =========================
+   MEMORY
+========================= */
+
+.memory {
+    max-width: 650px;
+
+    padding: 30px;
+
+    border: 1px solid var(--border);
+
+    background: var(--panel);
+
+    box-shadow:
+        0 0 35px rgba(255,127,168,0.05);
+}
+
+.memoryNumber {
+    color: var(--cyan);
+
+    font-size: 10px;
+
+    margin-bottom: 25px;
+}
+
+.memoryText {
+    font-size: 12px;
+
+    line-height: 2.2;
+
+    color: var(--text);
+}
+
+/* =========================
+   DATE
+========================= */
+
+.bigDate {
+    margin: 25px 0;
+
+    font-size: clamp(28px, 7vw, 55px);
+
+    color: var(--gold);
+
+    text-shadow:
+        0 0 20px rgba(245,211,122,0.2);
+}
+
+/* =========================
+   PASSWORD
+========================= */
+
+.passwordBox {
+    margin-top: 25px;
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+}
+
+.passwordBox input {
+    width: 230px;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    background: #07070c;
+
+    color: var(--cyan);
+
+    font-family: inherit;
+
+    text-align: center;
+
+    outline: none;
+}
+
+.passwordBox input:focus {
+    border-color: var(--cyan);
+}
+
+/* =========================
+   CHOICES
+========================= */
+
+.choices {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    width: min(500px, 100%);
+
+    margin-top: 30px;
+}
+
+/* =========================
+   HEART
+========================= */
+
+.heart {
+    color: var(--pink);
+
+    font-size: 45px;
+
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* =========================
+   STARS
+========================= */
+
+.stars {
+    color: var(--gold);
+
+    letter-spacing: 6px;
+
+    margin: 20px 0;
+}
+
+/* =========================
+   NOTIFICATION
+========================= */
+
+#notification {
+    position: fixed;
+
+    right: 20px;
+    top: 75px;
+
+    padding: 13px 16px;
+
+    border: 1px solid var(--cyan);
+
+    background: rgba(8,8,13,0.95);
+
+    color: var(--cyan);
+
+    font-size: 9px;
+
+    opacity: 0;
+
+    transform: translateX(20px);
+
+    pointer-events: none;
+
+    transition: 0.3s;
+
+    z-index: 800;
+}
+
+#notification.show {
+    opacity: 1;
+
+    transform: translateX(0);
+}
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    #hud {
+        padding: 0 15px;
+
+        font-size: 8px;
+    }
+
+    .object {
+        transform: scale(0.78);
+    }
+
+    .object:hover {
+        transform: scale(0.78) translateY(-5px);
+    }
+
+    #clock {
+        left: 5%;
+        top: 13%;
+    }
+
+    #photo {
+        left: 35%;
+        top: 22%;
+    }
+
+    #computer {
+        right: 0;
+        top: 15%;
+    }
+
+    #notebook {
+        left: 48%;
+        top: 48%;
+    }
+
+    #door {
+        left: 0;
+        bottom: 0;
+    }
+
+    .roomHint {
+        bottom: 15px;
+
+        font-size: 7px;
+    }
+
+    #dialogue {
+        bottom: 10px;
+
+        padding: 16px;
+    }
+
+    #dialogueText {
+        font-size: 9px;
+    }
+
+    .passwordBox input {
+        width: 100%;
+    }
+
+    .passwordBox button {
+        width: 100%;
+    }
+}
